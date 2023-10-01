@@ -26,12 +26,6 @@ Emotion analysis in audio data has various applications, from sentiment analysis
 - **Scalability:** The project is designed to be easily expandable and customizable for various applications.
 - **Detailed Documentation:** Comprehensive documentation on setup, usage, and customization.
 
-## Demo
-
-[Link to the live demo of the Audio Emotion Analyzer](#) (Add the URL when your project is live)
-
-![Demo Screenshot](./demo-screenshot.png)
-
 ## Getting Started
 
 Follow these steps to get the project up and running on your local machine.
