@@ -4,7 +4,8 @@ from PIL import Image
 import keras
 import numpy as np
 import librosa
-
+import matplotlib.pyplot as plt
+from librosa import display
 class livePredictions:
     def __init__(self, path, file):
         self.path = path
@@ -47,6 +48,9 @@ def detect_emotion(audio_file):
             pred.load_model()
             emotion=pred.makepredictions() 
             return emotion
+def extract_audio_features(data, sampling_rate):
+        mfccs = librosa.feature.mfcc(y=data, sr=sampling_rate, n_mfcc=13)
+        return mfccs
 st.title("Audio Emotion Detection App")
 st.subheader("Upload an audio file, and I'll detect the emotion in it.")
 audio_file = st.file_uploader("Upload an audio file", type=["wav", "mp3"])    
@@ -87,6 +91,11 @@ if audio_file:
             emotion = "Neutral"
             st.subheader(f"Emotion detected: {emotion}")
             emotion_image = Image.open("assets/neutral1.png")  
-
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.audio(audio_file, format="audio/wav")
+        data, sampling_rate = librosa.load(audio_file)
+        plt.figure(figsize=(12, 4))
+        librosa.display.waveshow(data, sr=sampling_rate)
+        st.pyplot() 
         st.image(emotion_image, caption=f"Emotion: {emotion}", use_column_width=True)
 
