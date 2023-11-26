@@ -20,11 +20,9 @@ class livePredictions:
         mfccs = np.mean(librosa.feature.mfcc(y=data, sr=sampling_rate, n_mfcc=40).T, axis=0)
         x = np.expand_dims(mfccs, axis=1)
         x = np.expand_dims(x, axis=0)
-#         predictions = self.loaded_model.predict_classes(x)
-        predict_x=self.loaded_model.predict(x) 
+        predict_x=self.loaded_model.predict(x)
         predictions=np.argmax(predict_x,axis=1)
-#         predictions = np.argmax(loaded_model.predict(x_test),axis=1)
-        return self.convertclasstoemotion(predictions)
+        return self.convertclasstoemotion(predictions),predict_x
 
     @staticmethod
     def convertclasstoemotion(pred):
@@ -56,13 +54,13 @@ st.subheader("Upload an audio file, and I'll detect the emotion in it.")
 audio_file = st.file_uploader("Upload an audio file", type=["wav", "mp3"])    
 
 if audio_file:
-    emotion = detect_emotion(audio_file)
+    emotion, predict_x = detect_emotion(audio_file)
     
     if emotion:
         if emotion == "happy":
             emotion = "Happy"
             st.subheader(f"Emotion detected: {emotion}")
-            emotion_image = Image.open("assets/happy.jpg") 
+            emotion_image = Image.open("assets/happy.png") 
         elif emotion == "angry":
             emotion = "Angry"
             st.subheader(f"Emotion detected: {emotion}")
@@ -78,7 +76,7 @@ if audio_file:
         elif emotion == "fearful":
             emotion = "Fearful"
             st.subheader(f"Emotion detected: {emotion}")
-            emotion_image = Image.open("assets/     fearful.jpg")
+            emotion_image = Image.open("assets/fearful.jpg")
         elif emotion == "disgust":
             emotion = "Disgust"
             st.subheader(f"Emotion detected: {emotion}")
@@ -97,5 +95,21 @@ if audio_file:
         plt.figure(figsize=(12, 4))
         librosa.display.waveshow(data, sr=sampling_rate)
         st.pyplot() 
-        st.image(emotion_image, caption=f"Emotion: {emotion}", use_column_width=True)
 
+        plt.figure(figsize=(12, 4))
+        mfccs = extract_audio_features(data,sampling_rate)
+        for i in range(len(mfccs)):
+            plt.bar(range(len(mfccs[i])), mfccs[i], alpha=0.7, label=f'MFCC {i+1}')
+        plt.xlabel('Frame Index')
+        plt.ylabel('MFCC Value')
+        plt.title('Spectrum Bar for Emotion (MFCC Coefficients)')
+        plt.legend()
+        st.pyplot()
+
+        plt.figure(figsize=(10, 6))
+        classes = ['Neutral', 'Calm', 'Happy', 'Sad', 'Angry', 'Fearful', 'Disgust', 'Surprised']
+        plt.bar(classes, predict_x[0])
+        plt.xlabel('Emotion Class')
+        plt.ylabel('Confidence Score')
+        plt.title('Emotion Confidence Scores')
+        st.pyplot()
