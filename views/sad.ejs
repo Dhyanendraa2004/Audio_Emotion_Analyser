@@ -1,0 +1,111 @@
+<!-- views/happy.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>book your movie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: rgb(7, 14, 52);
+            color: white;
+            font-family: 'Poppins';
+            
+        }
+        .box ul {
+            list-style-type: none;
+            margin-top: 6em;
+            width: 100em;
+            justify-content: center;
+        }
+
+        .box{
+            border-color: black;
+            border-radius: 3em;
+            margin: auto;
+            margin-top: 4%;
+            height: 40em;
+            width: 100em;
+            border: 6px solid ;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        .song{
+            display: flex;
+            height: 2em;
+            margin: 2em;
+            font-size: large;
+            background-color:  rgb(25, 30, 56);
+            border-radius: 7em;
+            align-items: center;
+        }
+        .u{
+            font-size: 1.25em;
+            margin: 45px;
+        }
+        .p{
+            font-size: 1.25em;
+            margin: 45px;
+        }
+        .name{
+            margin-top: 0%;
+        }
+        input{
+            border-radius: 7px;
+            height: 22px;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="box">
+            <h1>SAD SONGS</h1>
+
+             <% if (sadSongs && sadSongs.length > 0) { %>
+        <ul>
+            <% sadSongs.forEach(song => { %>
+                <li>
+                    <div class="song">
+                        <a href="/player?song=<%- encodeURIComponent(JSON.stringify(song.id)) %>"> <img style="height: 30px; width: 30px; margin-top: 10px; margin-left: 10px;margin-right: 5em;" src="https://drive.google.com/uc?export=view&id=1jDkXUjAJBxk_OcqtxUcbsp8VOQgpX3Mg" alt="not "></a>
+                        
+                        <span class="name"><%= song.name %></span>
+                    <!-- views/happy.ejs -->
+                </div>
+                            
+
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No happy songs found.</p>
+    <% } %>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.play-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get the song ID from the data attribute
+                    const songId = this.getAttribute('data-song-id');
+                    // Perform any action you want with the song ID, for example, redirect to a play page
+                    console.log('Playing song with ID:', songId);
+                    // You can use window.location.href or any other method to redirect or play the song
+                });
+            });
+        });
+    </script>
+</body>
+</html>
